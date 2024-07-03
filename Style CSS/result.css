@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+
+nav {
+    width: 100vw;
+}
+
+.brand {
+    font-family: "Playwrite AU TAS", cursive;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+
+.navbar {
+    background-color: #ff2761 !important;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.navbar a:hover {
+    background-color: #e966894e;
+    color: white;
+}
+
+h1 {
+    font-family: 'Kanit', sans-serif,!important;
+    font-weight: bolder;
+    font-style: normal;
+
+
+}
+h5{
+
+    font-size: 48px;
+    background: -webkit-linear-gradient(90deg,#0f26d5, #f5023b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.container1{
+   
+    background-color: rgb(242, 225, 225);
+}
+.container1 img{
+    border-radius: 50%;
+}
+.footer {
+    background-color: #4e747be7;
+    color: white;
+    padding: 40px 0;
+    width: 100vw;
+}
+.footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+.footer .social-icons a {
+    margin-right: 15px;
+    color: white;
+}
+.footer .social-icons a:hover {
+    color: #007bff;
+}
+.footer .subscribe input[type="email"] {
+    border: 1px solid #ced4da;
+    border-radius: 0;
+}
+
+.footer a:hover {
+
+    background: linear-gradient(to right, #2DE126 0%, #46FFFE 48%, #FFFA88 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: underline;
+  }
+  #error-image {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}

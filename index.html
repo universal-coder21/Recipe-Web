@@ -1,194 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZOKATO - Interactive Food Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff3366;
+            --secondary: #2a4494;
+            --accent: #ffd700;
+            --dark: #1a1a1a;
+            --light: #ffffff;
+        }
 
-  <link rel="stylesheet" href="Style CSS/style2.css">
-  <title>Food Reciepie </title>
+        /* Base Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
 
+        /* Enhanced Navbar */
+        .navbar {
+            background: transparent !important;
+            transition: all 0.3s ease;
+            padding: 1.5rem 2rem;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            background: rgba(42, 68, 148, 0.95) !important;
+            padding: 1rem 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--light) !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-link {
+            color: var(--light) !important;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem !important;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Hero Slider */
+        .hero-slider {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.1);
+            transition: transform 8s ease;
+        }
+
+        .slide.active .slide-bg {
+            transform: scale(1);
+        }
+
+        .slide-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            color: var(--light);
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 1s ease;
+        }
+
+        .slide.active .slide-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slide-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Slider Controls */
+        .slider-controls {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: var(--light);
+            text-align: center;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-indicator:hover {
+            opacity: 1;
+            transform: translate(-50%, -5px);
+        }
+
+        .scroll-arrow {
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .slide-title {
+                font-size: 2.5rem;
+            }
+            .slide-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand brand" href="#">ZOKATO</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="result.html">Search Recipe</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#hh">More</a>
-          </li>
-        </ul>
-        <!-- <span class="navbar-text"> -->
-
-        </span>
-      </div>
-    </div>
-  </nav>
-
-  <div class="herosection">
-    <div>
-      <h6 style="text-align: center;font-family: 'Kanit', sans-serif;
-  font-weight: bolder;
-  font-style: normal;" class="gradient-text"> Want To Know your favourite food reciepe? </h6>
-
-    </div>
-    <div class="slider">
-      <div class="slides">
-        <img src="assets/istockphoto-1345624336-612x612.jpg" alt="Image 1">
-        <img
-          src="https://media.istockphoto.com/id/587775952/photo/instant-noodles.jpg?s=612x612&w=0&k=20&c=rtqV-y9SIx0wsDMPH0O4fgbzxPzggDyz1hh8ywbl9zA="
-          alt="Image 2">
-        <img src="https://media.istockphoto.com/id/531010244/photo/dal-makhani-daal-makhani-dal-makhni-with-plain-basmati-rice.jpg?s=612x612&w=0&k=20&c=Seq5ewohx0U4uhaIvyHYdTV441-24GQ4c9rYHDL7bKU=" alt="Image 3">
-
-        <img
-          src="https://media.istockphoto.com/id/1454475462/photo/a-female-chef-pouring-sauce-on-a-fruitcake.jpg?s=612x612&w=0&k=20&c=9CBAMT0R5Sg5DPuWjZeyOPqj1mCrJHgDQ3MOaHuV5w0="
-          alt="Image 4">
-        <img src="https://media.istockphoto.com/id/1252605699/photo/veg-momos-on-black-slate-table-top-momos-is-the-popular-dish-of-indian-tibetan-chinese.jpg?s=612x612&w=0&k=20&c=-K4xCgsFxgv0OnSf9Omp8w06eoTE4_6b30pO12b6d9o=" alt="Image 5">
-        <img src="https://media.istockphoto.com/id/1412117500/photo/mix-veg-pakora-with-tomato-mint-sauce-on-old-wooden-table-top-view.jpg?s=612x612&w=0&k=20&c=WP3-uo38VcW7zXh_50FqJbiwkGOx4cIP7wo9gbLllVg="
-          alt="Image 6">
-        <img
-          src="https://as2.ftcdn.net/v2/jpg/06/08/70/65/1000_F_608706590_sFDScao9KONH8TV26LyK55NaVvLY4dt6.jpg"
-          alt="Image 7">
-        <img
-          src="https://media.istockphoto.com/id/1250399521/photo/vegetarian-palak-paneer.jpg?s=612x612&w=0&k=20&c=khML8mcnNouCRYjjCw_MrEuyAs1FgZ9rw9xV3jG8Dbk="
-          alt="Image 8">
-        <!-- Add more images as needed -->
-      </div>
-    </div>
-    <div style="margin: 20px; text-align: center;">
-      <!-- <button type="button" class="btn btn-primary"></button> -->
-      <a href="result.html" class="btn btn-primary">Get Sarted</a>
-    </div>
-  </div>
-
-  <div class="second" id="hh">
-
-    <h4 style="text-align: center;font-family: 'Kanit', sans-serif;
-    font-weight: bolder;
-    font-style: normal;">COLLECTION</h4>
-    <div class="container22">
-      <div> <a href="https://www.seriouseats.com/the-spotted-pigs-chargrilled-burger-at-home-recipe" target="_self">
-          <img
-            src="https://static.vecteezy.com/system/resources/previews/023/185/162/non_2x/burger-with-flying-ingredients-on-a-black-background-concept-of-fast-food-ai-generative-image-free-photo.jpg"
-            alt="Burger">
-        </a></div>
-      <div><a href="https://www.bigbasket.com/cookbook/recipes/2189/bachelors-diet-fruit-and-nut-biriyani/"
-          target="_self">
-          <img
-            src="https://static.wixstatic.com/media/f319d7_8757d097ac3342a48c5fdce5a029c381~mv2.jpg/v1/fill/w_640,h_640,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/f319d7_8757d097ac3342a48c5fdce5a029c381~mv2.jpg"
-            alt="Burger">
-        </a></div>
-
-
-      <div>
-        <a href="https://www.bigoven.com/recipe/chicken-sandwitch/304071" target="_self">
-          <img
-            src="https://img.freepik.com/free-photo/side-view-club-sandwich-with-salted-cucumbers-lemon-olives-round-white-plate_176474-3049.jpg"
-            alt="Burger">
-        </a>
-      </div>
-
-      <div>
-        <a href="https://www.bigoven.com/recipe/chicken-sandwitch/304071" target="_self">
-          <img src="https://www.daringgourmet.com/wp-content/uploads/2023/06/Dosa-Recipe-3-300x300.jpg" alt="Burger">
-        </a>
-      </div>
-      <!-- Add more image holders as needed -->
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h5>About Us</h5>
-          <p>This Help You to find reciepe of Any food you Want . To Do better Please Contact Me</p>
+    <!-- Enhanced Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">ZOKATO</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html">Search Recipe</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#categories">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="col-md-2">
+    </nav>
 
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#social">Contact</a></li>
-          </ul>
+    <!-- Hero Slider -->
+    <div class="hero-slider">
+        <div class="slide active">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1')"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h1 class="slide-title">Discover Amazing Recipes</h1>
+                <p class="slide-description">Explore a world of flavors with our curated collection of recipes</p>
+                <a href="search.html" class="btn btn-primary btn-lg">Start Cooking</a>
+            </div>
         </div>
-        <div class="col-md-2">
-          <h5>Services</h5>
-          <ul class="list-unstyled">
-            <li><a href="#">Food </a></li>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Consulting</a></li>
-          </ul>
+        <div class="slide">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1495521821757-a1efb6729352?ixlib=rb-1.2.1')"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h1 class="slide-title">Perfect Your Skills</h1>
+                <p class="slide-description">Learn from expert chefs and master the art of cooking</p>
+                <a href="#categories" class="btn btn-primary btn-lg">Explore Categories</a>
+            </div>
         </div>
-        <div class="col-md-4" id="social">
+        <div class="slide">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1')"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h1 class="slide-title">Share Your Passion</h1>
+                <p class="slide-description">Join our community of food lovers and share your culinary creations</p>
+                <a href="#contact" class="btn btn-primary btn-lg">Join Community</a>
+            </div>
+        </div>
 
-          <div class="social-icons mt-3">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
+        <!-- Slider Controls -->
+        <div class="slider-controls">
+            <div class="slider-dot active"></div>
+            <div class="slider-dot"></div>
+            <div class="slider-dot"></div>
         </div>
-      </div>
-      <div class="row mt-4">
-        <div class="col text-center">
-          <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-text">Scroll to explore</div>
+            <div class="scroll-arrow">↓</div>
         </div>
-      </div>
     </div>
-  </footer>
 
+    <script>
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
 
+        // Hero Slider
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentSlide = 0;
+        const slideInterval = 5000;
 
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
 
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
 
+        // Initialize slider controls
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => goToSlide(index));
+        });
 
+        // Auto-advance slides
+        setInterval(nextSlide, slideInterval);
 
+        // Touch support for slider
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-  <script>
-    const slides = document.querySelector('.slides');
-    const images = document.querySelectorAll('.slides img');
-    let index = 0;
+        const slider = document.querySelector('.hero-slider');
 
-    function showNextSlide() {
-      index = (index + 1) % images.length;
-      slides.style.transform = `translateX(-${index * 100}%)`;
-    }
+        slider.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        });
 
-    setInterval(showNextSlide, 3000);
+        slider.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
 
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchEndX - touchStartX;
 
-
-
-
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-    crossorigin="anonymous"></script>
-
-
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    goToSlide(currentSlide - 1); // Swipe right
+                } else {
+                    goToSlide(currentSlide + 1); // Swipe left
+                }
+            }
+        }
+    </script>
 </body>
-
 </html>
